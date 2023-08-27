@@ -1,8 +1,37 @@
 {#include base} 
   {#body}
   <h2>{msg:find_owners}</h2>
+<script>
+      document.addEventListener('DOMContentLoaded', function() {
+          const searchOwnerForm = document.getElementById('search-owner-form');
 
-  <form action="/owners" method="get"
+          searchOwnerForm.addEventListener('submit', function(event) {
+              event.preventDefault(); // Prevent default form submission
+
+              // Retrieve the last name input
+              const lastName = document.getElementById('lastName').value;
+
+              // Make a fetch request with the token
+              fetch("/owners?lastName="+lastName, {
+                  headers: {
+                      'Authorization': "Bearer "+getCookie('csrftoken')
+                  }
+              })
+              .then(response => {
+                  if (response.ok) {
+                      // Process the response
+                  } else {
+                      console.error('Request failed:', response.statusText);
+                  }
+              })
+              .catch(error => {
+                  console.error('Request failed:', error);
+              });
+          });
+      });
+  </script>
+
+<form action="/owners" method="get"
     class="form-horizontal" id="search-owner-form">
     <div class="form-group">
       <div class="control-group" id="lastNameGroup">
@@ -17,7 +46,6 @@
                         <p>{err}</p>
                     {/for}
                 </div>
-            </div>
             </span>
             {/if}
         </div>

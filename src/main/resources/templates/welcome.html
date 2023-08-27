@@ -1,6 +1,12 @@
 {#include base} 
   {#body}
   <h2>{msg:welcome}</h2>
+
+    {#if isLoggedIn }
+    <p>You are logged in!</p>
+    {#else}
+    <p><a href="/login">Click here to login</a></p>
+    {/if}
   <div class="row">
       <div class="col-md-12">
         <img class="img-responsive" src="../images/pets.png"/>

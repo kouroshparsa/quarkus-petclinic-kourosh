@@ -99,4 +99,9 @@ public interface AppMessages {
     @Message("Something happened...")
     String something_wrong();
 
+    @Message("Login")
+    String login();
+
+    @Message("Failed to login due to an invalid email address or password")
+    String login_error();
 }

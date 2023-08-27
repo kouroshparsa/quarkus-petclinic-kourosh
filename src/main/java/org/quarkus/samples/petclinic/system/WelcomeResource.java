@@ -1,11 +1,12 @@
 package org.quarkus.samples.petclinic.system;
 
-import java.util.Locale;
-
+import javax.annotation.security.PermitAll;
 import javax.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 
 import io.quarkus.qute.TemplateInstance;
@@ -17,9 +18,11 @@ public class WelcomeResource {
     TemplatesLocale templates;
 
     @GET
+    @PermitAll
     @Produces(MediaType.TEXT_HTML)
-    public TemplateInstance get() {
-        return templates.welcome();
+    public TemplateInstance get(@Context HttpHeaders headers) {
+        boolean tokenCookiePresent = headers.getCookies().containsKey("token");
+        return templates.welcome(tokenCookiePresent);
     }
 
 }

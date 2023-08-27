@@ -1,0 +1,22 @@
+{#include base}
+{#body}
+  {#if error}
+    <div style="color:red;padding:20px;">{msg:login_error}</div>
+  {/if}
+
+
+
+  <h2>Log in:</h2>
+  <form action="/login" method="post">
+    <div class="form-group">
+      <div class="col-sm-offset-2 col-sm-10">
+        Email:<input class="form-control" type="text" id="email" name="email" required/>
+        Password:<input class="form-control" type="password" id="password" name="password" required/>
+        <button class="btn btn-primary" type="submit">Login</button>
+      </div>
+    </div>
+  </form>
+  <br/>
+  <p>If you forgot your password, please email <a href="/">Support</a></p>
+{/body}
+{/include}
