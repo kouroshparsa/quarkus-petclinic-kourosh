@@ -52,4 +52,5 @@ INSERT INTO visits(id, pet_id, visit_date, description) VALUES (1002, 1008, '201
 INSERT INTO visits(id, pet_id, visit_date, description) VALUES (1003, 1008, '2013-01-03', 'neutered');
 INSERT INTO visits(id, pet_id, visit_date, description) VALUES (1004, 1007, '2013-01-04', 'spayed');
 
-INSERT INTO users(id, first_name, last_name, email, password) VALUES (1014, 'kourosh', 'parsa', 'test@bcservice.com', '$2a$10$3UTRoWAgjg7U/u.rtw1x.OwWFLoT93rg1SwJdYAOVGw/ZgQSErI2u');
+INSERT INTO users(id, first_name, last_name, email, password) VALUES (1014, 'Kourosh', 'Parsa', 'test@bcservice.com', '$2a$10$3UTRoWAgjg7U/u.rtw1x.OwWFLoT93rg1SwJdYAOVGw/ZgQSErI2u');
+INSERT INTO users(id, first_name, last_name, email, password) VALUES (1014, 'John', 'Doe', 'test2@bcservice.com', '$2a$10$rprzpY2UPP5QDIy0mQ5kN.LT8gDeFYo5EMHjEuQezaZVpJFPJIXCO');

@@ -10,19 +10,44 @@ projects:
         revision: main
 
 components:
+  - name: maven
+    container:
+      image: 'registry.redhat.io/codeready-workspaces/plugin-java11-rhel8@sha256:641e223f5efbc32bab3461aa000e3a50a5dcca063331322158d1c959129ffd99'
+      volumeMounts:
+        - name: m2
+          path: /home/jboss/.m2
+      mountSources: true
+      endpoints:
+        - name: 8080-tcp
+          targetPort: 8080
+      memoryLimit: 768Mi
+      env:
+        - value: '-XX:MaxRAMPercentage=50.0 -XX:+UseParallelGC -XX:MinHeapFreeRatio=10 -XX:MaxHeapFreeRatio=20 -XX:GCTimeRatio=4 -XX:AdaptiveSizePolicyWeight=90 -Dsun.zip.disableMemoryMapping=true -Xms20m -Djava.security.egd=file:/dev/./urandom -Duser.home=/home/jboss'
+          name: JAVA_OPTS
+        - value: $(JAVA_OPTS)
+          name: MAVEN_OPTS
+        - value: 'jdbc:postgresql://postgresql:5432/petclinic'
+          name: DB_URL
+  - name: m2
+    volume:
+      size: 2Gi
   - name: postgresql
     container:
       image: registry.redhat.io/rhel8/postgresql-12@sha256:6fd58e4ede8e77b4ac434667df49150adac69273172764c54b1b0211612f51b5
       memoryLimit: 512Mi
       env:
+        - name: DATABASE_SERVICE_NAME
+          value: postgresql
         - name: POSTGRESQL_USER
           value: petclinic
         - name: POSTGRESQL_PASSWORD
           value: petclinic
+        - name: POSTGRESQL_ADMIN_PASSWORD
+          value: petclinic
         - name: POSTGRESQL_DATABASE
           value: petclinic
       volumeMounts:
-        - name: postgres-storage
+        - name: postgresql-storage
           path: /var/lib/pgsql/data
       endpoints:
         - name: postgresql
@@ -30,38 +55,13 @@ components:
           attributes:
             discoverable: 'true'
             public: 'false'
-  - name: postgres-storage
-    volume:
-      size: 1Gi
-
-  - name: quarkus-dev
-    container:
-      image: registry.redhat.io/devspaces/udi-rhel8
-      sourceMapping: /projects
-      memoryLimit: 8Gi
-      memoryRequest: 512Mi
-      volumeMounts:
-        - name: m2
-          path: /home/user/.m2
-      endpoints:
-        - exposure: public
-          name: quarkus-dev
-          targetPort: 8080
-          protocol: https
-        - exposure: public
-          name: swagger-ui
-          targetPort: 8080
-          protocol: https
-          path: /q/swagger-ui
-      env:
-        - name: CHE_PLUGIN_REGISTRY_URL
-          value: https://open-vsx.org
-  - name: m2
+  - name: postgresql-storage
     volume:
       size: 2Gi
+
 commands:
-  - id: 01build
+  - id: 01run
     exec:
-      component: quarkus-dev
-      commandLine: 'mvn quarkus:dev'
+      component: maven
+      commandLine: 'mvnw compile quarkus:prod'
       workingDir: '${CHE_PROJECTS_ROOT}/quarkus-petclinic'
