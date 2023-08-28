@@ -63,5 +63,6 @@ commands:
   - id: 01run
     exec:
       component: maven
+      kind: run
       commandLine: 'mvnw compile quarkus:prod'
-      workingDir: '${CHE_PROJECTS_ROOT}/quarkus-petclinic'
+      workingDir: ${PROJECT_SOURCE}
