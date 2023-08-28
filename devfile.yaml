@@ -89,7 +89,6 @@ components:
   - name: m2
     volume:
       size: 2Gi
-
 commands:
   - id: 01build
     exec:
