@@ -10,31 +10,6 @@ projects:
         revision: main
 
 components:
-  - name: maven
-    container:
-      image: 'registry.redhat.io/codeready-workspaces/plugin-java11-rhel8@sha256:641e223f5efbc32bab3461aa000e3a50a5dcca063331322158d1c959129ffd99'
-      volumeMounts:
-        - name: m2
-          path: /home/jboss/.m2
-      mountSources: true
-      endpoints:
-        - name: 8080-tcp
-          targetPort: 8080
-      memoryLimit: 768Mi
-      env:
-        - value: '-XX:MaxRAMPercentage=50.0 -XX:+UseParallelGC -XX:MinHeapFreeRatio=10 -XX:MaxHeapFreeRatio=20 -XX:GCTimeRatio=4 -XX:AdaptiveSizePolicyWeight=90 -Dsun.zip.disableMemoryMapping=true -Xms20m -Djava.security.egd=file:/dev/./urandom -Duser.home=/home/jboss'
-          name: JAVA_OPTS
-        - value: $(JAVA_OPTS)
-          name: MAVEN_OPTS
-        - name: POSTGRESQL_USER
-          value: petclinic
-        - name: POSTGRESQL_PASSWORD
-          value: petclinic
-        - name: POSTGRESQL_DATABASE
-          value: petclinic
-  - name: m2
-    volume:
-      size: 2Gi
   - name: postgresql
     container:
       image: registry.redhat.io/rhel8/postgresql-12@sha256:6fd58e4ede8e77b4ac434667df49150adac69273172764c54b1b0211612f51b5
@@ -58,11 +33,6 @@ components:
   - name: postgres-storage
     volume:
       size: 1Gi
-
-  - name: quarkus-app
-    container:
-      image: 'quay.io/quarkus/ubi-quarkus-native-binary-s2i:21.0-java11'
-      memoryLimit: 1Gi
 
   - name: quarkus-dev
     container:
