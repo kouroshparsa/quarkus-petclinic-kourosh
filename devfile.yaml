@@ -62,7 +62,7 @@ components:
   - name: quarkus-app
     container:
       image: 'quay.io/quarkus/ubi-quarkus-native-binary-s2i:21.0-java11'
-    memoryLimit: 1Gi
+      memoryLimit: 1Gi
 
   - name: quarkus-dev
     container:
