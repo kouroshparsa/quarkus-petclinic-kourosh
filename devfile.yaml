@@ -63,5 +63,10 @@ commands:
   - id: 01run
     exec:
       component: maven
-      commandLine: 'mvnw compile quarkus:prod'
+      commandLine: './mvnw compile quarkus:prod'
+      workingDir: ${PROJECT_SOURCE}
+  - id: 01deploytoopenshift
+    exec:
+      component: maven
+      commandLine: 'mvn fabric8:deploy -Popenshift -DskipTests'
       workingDir: ${PROJECT_SOURCE}
