@@ -59,40 +59,40 @@ components:
     volume:
       size: 1Gi
 
+  - name: quarkus-app
+    container:
+      image: 'quay.io/quarkus/ubi-quarkus-native-binary-s2i:21.0-java11'
+    memoryLimit: 1Gi
+
+  - name: quarkus-dev
+    container:
+      sourceMapping: /projects
+      memoryLimit: 8Gi
+      memoryRequest: 512Mi
+      volumeMounts:
+        - name: m2
+          path: /home/user/.m2
+      image: registry.redhat.io/devspaces/udi-rhel8
+      endpoints:
+        - exposure: public
+          name: quarkus-dev
+          targetPort: 8080
+          protocol: https
+        - exposure: public
+          name: swagger-ui
+          targetPort: 8080
+          protocol: https
+          path: /q/swagger-ui
+      env:
+        - name: CHE_PLUGIN_REGISTRY_URL
+          value: https://open-vsx.org
+  - name: m2
+    volume:
+      size: 2Gi
+
 commands:
   - id: 01build
     exec:
-      component: maven
-      commandLine: 'MAVEN_OPTS="-Xmx200m" && mvn -Duser.home=${HOME} -DskipTests clean install'
+      component: quarkus-dev
+      commandLine: 'mvn quarkus:dev'
       workingDir: '${CHE_PROJECTS_ROOT}/quarkus-petclinic'
-  - id: 02compileandrun
-    exec:
-      component: maven
-      commandLine: 'MAVEN_OPTS="-Xmx200m" && mvn -Duser.home=${HOME} mvn package'
-      workingDir: '${CHE_PROJECTS_ROOT}/quarkus-petclinic'
-  - id: 03runindebugmode
-    exec:
-      workingDir: '${CHE_PROJECTS_ROOT}/quarkus-petclinic'
-      commandLine: |-
-        mvn  -Duser.home=${HOME} spring-boot:run -Dspring-boot.run.jvmArguments="-Xdebug
-         -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=5005"
-      component: maven
-  - id: 04runtests
-    exec:
-      workingDir: '${CHE_PROJECTS_ROOT}/quarkus-petclinic'
-      commandLine: 'MAVEN_OPTS="-Xmx200m" && mvn -Duser.home=${HOME} verify'
-      component: maven
-  - id: 05logintodeploymentcluster
-    exec:
-      workingDir: '${CHE_PROJECTS_ROOT}/quarkus-petclinic'
-      commandLine: |
-        echo
-        echo "Before you can deploy this application to an openshift cluster,"
-        echo "you must run 'oc login ...' in the maven terminal."
-        echo
-      component: maven
-  - id: 06deploytoopenshift
-    exec:
-      workingDir: '${CHE_PROJECTS_ROOT}/quarkus-petclinic'
-      commandLine: 'mvn fabric8:deploy -Popenshift -DskipTests'
-      component: maven
