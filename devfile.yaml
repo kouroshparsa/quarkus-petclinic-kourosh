@@ -36,13 +36,13 @@ components:
 
   - name: quarkus-dev
     container:
+      image: registry.redhat.io/devspaces/udi-rhel8
       sourceMapping: /projects
       memoryLimit: 8Gi
       memoryRequest: 512Mi
       volumeMounts:
         - name: m2
           path: /home/user/.m2
-      image: registry.redhat.io/devspaces/udi-rhel8
       endpoints:
         - exposure: public
           name: quarkus-dev
