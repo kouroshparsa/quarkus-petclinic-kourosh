@@ -33,5 +33,5 @@ COPY --from=0 --chown=1001 /build/target/quarkus-app/*.jar /deployments/export-r
 COPY --from=0 --chown=1001 /build/target/quarkus-app/app/ /deployments/app/
 COPY --from=0 --chown=1001 /build/target/quarkus-app/quarkus/ /deployments/quarkus/
 EXPOSE 8080
-#ENTRYPOINT ["/opt/jboss/container/java/run/run-java.sh"]
-CMD ["./mvnw", "package", "-DskipTests", "-Dquarkus.container-image.push=true"]
+ENTRYPOINT ["/opt/jboss/container/java/run/run-java.sh"]
+#CMD ["./mvnw", "compile", "quarkus:prod"]
