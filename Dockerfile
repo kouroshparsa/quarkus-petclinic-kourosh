@@ -3,6 +3,10 @@ FROM registry.access.redhat.com/ubi8/openjdk-17:1.16
 USER root
 WORKDIR /build
 
+RUN ls
+RUN ls /build
+RUN ls /build/quarkus-petclinic-kourosh
+
 COPY pom.xml .
 RUN mvn dependency:go-offline
 
