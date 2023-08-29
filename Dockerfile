@@ -4,13 +4,9 @@ FROM registry.access.redhat.com/ubi8/openjdk-17:1.16
 USER root
 WORKDIR /build
 
-RUN yum install git -y
-git clone https://github.com/kouroshparsa/quarkus-petclinic-kourosh.git
 RUN ls /build
-COPY quarkus-petclinic-kourosh/pom.xml /build
-COPY quarkus-petclinic-kourosh/src /build/src
-
-RUN ls /build
+COPY pom.xml /build
+COPY src /build/src
 
 
 RUN mvn dependency:go-offline
