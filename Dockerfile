@@ -2,15 +2,14 @@ FROM registry.access.redhat.com/ubi8/openjdk-17:1.16
 
 USER root
 WORKDIR /build
+COPY pom.xml /build
+COPY src /build/src
 
-RUN ls
 RUN ls /build
-RUN ls /build/quarkus-petclinic-kourosh
 
-COPY pom.xml .
+
 RUN mvn dependency:go-offline
 
-COPY src src
 RUN mvn package -Dmaven.test.skip=true
 
 RUN grep version /build/target/maven-archiver/pom.properties | cut -d '=' -f2 >.env-version
