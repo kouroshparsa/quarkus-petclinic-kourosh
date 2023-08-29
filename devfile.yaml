@@ -38,6 +38,35 @@ components:
         - name: http-8081
           targetPort: 8081
           path: /
+
+  - name: postgresql
+    container:
+      image: registry.redhat.io/rhel8/postgresql-12@sha256:6fd58e4ede8e77b4ac434667df49150adac69273172764c54b1b0211612f51b5
+      memoryLimit: 512Mi
+      env:
+        - name: DATABASE_SERVICE_NAME
+          value: postgresql
+        - name: POSTGRESQL_USER
+          value: petclinic
+        - name: POSTGRESQL_PASSWORD
+          value: petclinic
+        - name: POSTGRESQL_ADMIN_PASSWORD
+          value: petclinic
+        - name: POSTGRESQL_DATABASE
+          value: petclinic
+      volumeMounts:
+        - name: postgresql-storage
+          path: /var/lib/pgsql/data
+      endpoints:
+        - name: postgresql
+          targetPort: 5432
+          attributes:
+            discoverable: 'true'
+            public: 'false'
+  - name: postgresql-storage
+    volume:
+      size: 2Gi
+
 commands:
   - id: build-image
     apply:
